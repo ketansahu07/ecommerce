@@ -15,6 +15,9 @@ class Category(models.Model):
     active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return self.title
 
