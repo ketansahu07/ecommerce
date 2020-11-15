@@ -41,7 +41,7 @@ class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     # add pagination class
 
-class ProductListAPIView(generics.ListCreateAPIView):
+class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # more attributes to be added

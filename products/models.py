@@ -73,7 +73,7 @@ def image_upload_to(instance, filename):
     title = instance.product.title
     slug = slugify(title)
     basename, file_extension = filename.split('.')
-    new_filename = f'{slug}-{instance.id}.{file_extension}'
+    new_filename = f'{slug}-{instance.product.id}.{file_extension}'
     return f'products/{slug}/{new_filename}'
 
 class ProductImage(models.Model):
