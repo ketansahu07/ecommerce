@@ -82,3 +82,46 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.title
+
+class Variation(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    title = models.CharField(max_length=225)
+    price = models.DecimalField(decimal_places=2, max_digits=20)
+    sale_price = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
+    active = models.BooleanField(default=True)
+    inventory = models.IntegerField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+    def get_price(self):
+        if self.sale_price is not None:
+            return self.sale_price
+        else:
+            return self.price
+
+    # GET_HTML_PRICE IS NEEDED HERE OR NOT?
+
+    def get_absolute_url(self):
+        return self.product.get_absolute_url()
+
+    def add_to_cart(self):
+        return f'{reverse("cart")}?item={self.id}&qty=1'
+
+    def remove_from_cart(self):
+        return f'{reverse("cart")}?item={self.id}&qty=1&delete=True'
+
+    def get_title(self):
+        return f'{self.product.title} - {self.title}'
+
+def product_post_saved_receiver(sender, instance, created, *args, **kwargs):
+    product = instance
+    variation = product.variation_set.all()
+    if variation.count() == 0:
+        new_var = Variation()
+        new_var.product = product
+        new_var.title = 'Default'
+        new_var.price = product.price
+        new_var.save()
+
+post_save.connect(product_post_saved_receiver, sender=Product)

@@ -19,7 +19,8 @@ from .models import Product, Category
 from .serializers import (
 		CategorySerializer, 
 		ProductSerializer,
-        ProductDetailSerializer
+        ProductDetailSerializer,
+        ProductDetailUpdateSerializer
 		)
 
 class APIHomeView(APIView):
