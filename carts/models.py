@@ -11,10 +11,10 @@ class CartItem(models.Model):
     cart = models.ForeignKey("Cart", on_delete=models.CASCADE)
     item = models.ForeignKey(Variation, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    Line_item_total = models.DecimalField(max_digits=10, decimal_places=2)
+    line_item_total = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def __unicode__(self):
-        return self.item__title
+    def __str__(self):
+        return self.item.title
 
     def remove(self):
         return self.item.remove_from_cart()
@@ -46,8 +46,8 @@ class Cart(models.Model):
     total = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
     active = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return str(self.id)
+    def __str__(self):
+        return str(self.user)
 
     def update_subtotal(self):
         print("updating...")
@@ -64,7 +64,7 @@ class Cart(models.Model):
 def do_tax_and_total_receiver(sender, instance, *args, **kwargs):
     subtotal = Decimal(instance.subtotal)
     tax_total = round(subtotal * Decimal(instance.tax_percentage), 2)   #8.5%
-    print(instance.tax_percentage)
+    # print(instance.tax_percentage)
     total  = round(subtotal + Decimal(tax_total), 2)
     instance.tax_total = "%.2f" %(tax_total)
     instance.total = "%.2f" %(total)
