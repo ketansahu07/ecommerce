@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from .secrets import secret_key
+from .secrets import secret_key, braintree_public, braintree_private, braintree_merchant_id
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'products',
     'carts',
+    'orders',
     'rest_framework',
 ]
 
@@ -125,3 +126,10 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'       # 'http://myhost:port/media/'
+
+
+#Braintree Payments Details
+BRAINTREE_PUBLIC = braintree_public
+BRAINTREE_PRIVATE = braintree_private
+BRAINTREE_MERCHANT_ID = braintree_merchant_id
+BRAINTREE_ENVIRONEMNT = "Sandbox"
