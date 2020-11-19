@@ -1,0 +1,3 @@
+1. check where from where the checkout_token (in request.GET) is coming in Orders.UserAddressListAPIView
+2. also check for other such keys in carts and products app
+3. Why was braintree_id key deleted from data in Orders.UserCheckoutMixin
