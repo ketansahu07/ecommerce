@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from cart.mixins import TokenMixin
+from carts.mixins import TokenMixin
 
 from .models import UserAddress, Order
 
@@ -57,7 +57,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         return obj.cart.subtotal
 
 
-class OrderSerailizer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     subtotal = serializers.SerializerMethodField()
 
     class Meta:

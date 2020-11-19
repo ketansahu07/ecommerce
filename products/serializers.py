@@ -87,13 +87,13 @@ class ProductSerializer(serializers.ModelSerializer):
             return None
 
 class CategorySerializer(serializers.ModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(view_name='category-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='category-detail')
     product_set = ProductSerializer(many=True)
     
     class Meta:
         model = Category
         fields = [
-            #'url',
+            'url',
             'id',
             'title',
             'description',

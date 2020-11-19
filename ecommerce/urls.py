@@ -18,8 +18,25 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from orders.views import (UserAddressCreateAPIView,
+                          UserAddressListAPIView,
+                          UserCheckoutAPI,
+                          OrderListAPIView,
+                          OrderRetrieveAPIView,
+                          )
+
+from products.views import (APIHomeView,
+                            CategoryListAPIView,
+                            CategoryRetrieveAPIView,
+                            ProductListAPIView,
+                            ProductRetrieveAPIView,
+                            )
 
 urlpatterns = [
-    path('', include('products.urls')),
     path('admin/', admin.site.urls),
+    path('api/',APIHomeView.as_view(), name='home'),
+    path('api/products/', ProductListAPIView.as_view(), name='product-list'),
+    path('api/products/<int:pk>/', ProductRetrieveAPIView.as_view(), name='product-detail'),
+    path('api/categories/', CategoryListAPIView.as_view(), name='categories-list'),
+    path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category-detail'),
 ]

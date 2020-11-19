@@ -42,6 +42,12 @@ class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     # add pagination class
 
+class CategoryRetrieveAPIView(generics.RetrieveAPIView):
+    #authentication_classes = [SessionAuthentication]
+	#permission_classes = [IsAuthenticated]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
