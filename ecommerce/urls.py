@@ -35,8 +35,18 @@ from products.views import (APIHomeView,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',APIHomeView.as_view(), name='home'),
-    path('api/products/', ProductListAPIView.as_view(), name='product-list'),
-    path('api/products/<int:pk>/', ProductRetrieveAPIView.as_view(), name='product-detail'),
-    path('api/categories/', CategoryListAPIView.as_view(), name='categories-list'),
-    path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category-detail'),
+    path('api/products/', ProductListAPIView.as_view(), name='product_list'),
+    path('api/products/<int:pk>/', ProductRetrieveAPIView.as_view(), name='product_detail'),
+    path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
+    path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category_detail'),
+    path('api/orders/', OrderListAPIView.as_view(), name='orders'),
+    path('api/orders/<int:pk>/', OrderRetrieveAPIView.as_view(), name='order_detail'),
+    path('api/user/address/', UserAddressListAPIView.as_view(), name='user_address_list'),
+    path('api/user/address/create/', UserAddressCreateAPIView.as_view(), name='user_address_create'),
+    path('api/user/checkout/', UserCheckoutAPI.as_view(), name='user_checkout'),
 ]
+
+
+if settings.DEBUG:
+	urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

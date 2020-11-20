@@ -64,7 +64,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         return obj.productimage_set.first().image.url
 
 class ProductSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='product-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='product_detail')
     variation_set = VariationSerializer(many=True)
     image = serializers.SerializerMethodField() # read-only field. It gets its value by calling a method on the serializer class it is attached to
                                                 # default method it uses is get_<field_name>
@@ -87,7 +87,7 @@ class ProductSerializer(serializers.ModelSerializer):
             return None
 
 class CategorySerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='category-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='category_detail')
     product_set = ProductSerializer(many=True)
     
     class Meta:

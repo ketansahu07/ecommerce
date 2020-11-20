@@ -58,7 +58,7 @@ class UserAddressListAPIView(TokenMixin, ListAPIView):
         user_checkout_token = self.request.GET.get("checkout_token")
         user_checkout_data = self.parse_token(user_checkout_token)
         user_checkout_id = user_checkout_data.get("user_checkout_id")
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return UserAddress.objects.filter(user__user=self.request.user)
         elif user_checkout_id:
             return UserAddress.objects.filter(user__id=int(user_checkout_id))

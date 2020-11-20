@@ -28,11 +28,18 @@ class APIHomeView(APIView):
         data = {
             'products': {
                 'count': Product.objects.all().count(),
-                'url': api_reverse('product-list', request=request)
+                'url': api_reverse('product_list', request=request)
             },
             'categories': {
                 'count': Category.objects.all().count(),
-                'url': api_reverse('categories-list', request=request)
+                'url': api_reverse('categories_list', request=request)
+            },
+            'orders': {
+                'url': api_reverse('orders', request=request),
+            },
+            'address': {
+                'url': api_reverse('user_address_list', request=request),
+                'create': api_reverse('user_address_create', request=request),
             },
         }
         return Response(data)
