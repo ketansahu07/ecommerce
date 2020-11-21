@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from carts.views import (CartAPIView,
                          CheckoutAPIView,
@@ -40,8 +41,8 @@ from products.views import (APIHomeView,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',APIHomeView.as_view(), name='home'),
-    # path('api/auth/token/', 'rest_framework_jwt.views.obtain_jwt_token', name='auth_login'),
-    # path('api/auth/token/refresh', 'rest_framework_jwt.views.refresh_jwt_token', name='refresh_token'),
+    path('api/auth/token/', obtain_jwt_token, name='auth_login'),
+    path('api/auth/token/refresh', refresh_jwt_token, name='refresh_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
     path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category_detail'),
     path('api/products/', ProductListAPIView.as_view(), name='product_list'),

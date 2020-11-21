@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import datetime
 import os
 from .secrets import secret_key, braintree_public, braintree_private, braintree_merchant_id
 
@@ -135,15 +136,22 @@ BRAINTREE_MERCHANT_ID = braintree_merchant_id
 BRAINTREE_ENVIRONEMNT = "Sandbox"
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.AllowAny',
-#     ),
-#       'DEFAULT_AUTHENTICATION_CLASSES': (
-#         #'rest_framework.authentication.BasicAuthentication',
-#         #'rest_framework.authentication.SessionAuthentication',
-#         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
-#     ),
-#       'DEFAULT_PAGINATION_CLASS': 'products.pagination.ProductPagination',
-#       "SEARCH_PARAM" : "q"
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+    ),
+    # 'DEFAULT_PAGINATION_CLASS': 'products.pagination.ProductPagination',
+    "SEARCH_PARAM" : "q"
+}
+
+JWT_AUTH = {
+    "JWT_RESPONSE_PAYLOAD_HANDLER": 
+            "rest_framework_jwt.utils.jwt_response_payload_handler",
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=30000),
+    "JWT_ALLOW_REFRESH": True, #False
+}

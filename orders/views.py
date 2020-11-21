@@ -85,7 +85,7 @@ class UserCheckoutMixin(TokenMixin, object):
         data = {}
         user_checkout = None
         if user and not email:
-            if user.is_authenticated():
+            if user.is_authenticated:
                 user_checkout = UserCheckout.objects.get_or_create(user=user, email=user.email)[0]  # (instance, created) [0]-> returns only the instance
         
         elif email:
