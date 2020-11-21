@@ -3,3 +3,4 @@
 3. Why was braintree_id key deleted from data in Orders.UserCheckoutMixin
 4. CategoriesSerializer is not displaying the product_set
 5. how is order_token sent in the request?
+6. change braintree_id from 999999999 to something else or check how to auto generate it in Orders.UserCheckout model
