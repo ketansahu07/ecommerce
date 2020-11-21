@@ -44,7 +44,7 @@ class TokenMixin(object):
 	token = None
 	def create_token(self, data_dict):
 		if type(data_dict) == type(dict()):
-			token = base64.b64encode(str(data_dict))
+			token = base64.b64encode(str(data_dict).encode('utf-8'))
 			self.token = token
 			return token
 		else:
@@ -94,7 +94,6 @@ class CartTokenMixin(TokenMixin, object):
 			data = {
 				"cart": cart.id,
 				"success": True,
-				
 			}
 			#return Response(data)
 

@@ -26,6 +26,11 @@ from .serializers import (
 class APIHomeView(APIView):
     def get(self, request, format=None):
         data = {
+            # 'auth': {
+            #     'login_url': api_reverse('auth_login', request=request),
+            #     'refresh_url': api_reverse('refresh_token', request=request),
+            #     'user_checkout': api_reverse('user_checkout', request=request),
+            # },
             'products': {
                 'count': Product.objects.all().count(),
                 'url': api_reverse('product_list', request=request)
@@ -40,6 +45,11 @@ class APIHomeView(APIView):
             'address': {
                 'url': api_reverse('user_address_list', request=request),
                 'create': api_reverse('user_address_create', request=request),
+            },
+            'checkout': {
+                'cart': api_reverse('cart', request=request),
+                'checkout': api_reverse('checkout', request=request),
+                'finalize': api_reverse('checkout_finalize', request=request),
             },
         }
         return Response(data)

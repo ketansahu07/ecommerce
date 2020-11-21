@@ -2,3 +2,4 @@
 2. also check for other such keys in carts and products app
 3. Why was braintree_id key deleted from data in Orders.UserCheckoutMixin
 4. CategoriesSerializer is not displaying the product_set
+5. how is order_token sent in the request?
