@@ -55,7 +55,7 @@ class Product(models.Model):
     objects = ProductManager()  # this returns the custom selected objects as described in the ProductManager class
 
     class Meta:
-        ordering = ['title']    # order the list according to the title
+        ordering = ['-title']    # order the list according to the title
 
     def __unicode__(self):
         return self.title
@@ -120,8 +120,9 @@ def product_post_saved_receiver(sender, instance, created, *args, **kwargs):
     if variation.count() == 0:
         new_var = Variation()
         new_var.product = product
-        new_var.title = 'Default'
+        new_var.title = product.title
         new_var.price = product.price
+        new_var.sale_price = product.price
         new_var.save()
 
 post_save.connect(product_post_saved_receiver, sender=Product)
