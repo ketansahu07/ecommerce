@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
     ),
-    'DEFAULT_PAGINATION_CLASS': 'products.pagination.ProductPagination',
+    'DEFAULT_PAGINATION_CLASS': 'products.pagination.ProductPagination2',
     "SEARCH_PARAM" : "q"
 }
 
