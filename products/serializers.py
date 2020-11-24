@@ -75,6 +75,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'url',
             'id',
             'title',
+            'description',
             'price',
             'image',
             'variation_set',

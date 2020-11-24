@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -15,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse as api_reverse
 from rest_framework.views import APIView
 
+from .filters import ProductFilter
 from .models import Product, Category
 from .serializers import (
 		CategorySerializer, 
@@ -66,9 +68,16 @@ class CategoryRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = CategorySerializer
 
 class ProductListAPIView(generics.ListAPIView):
+    #permission_classes = [IsAuthenticated]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # more attributes to be added
+    filter_backends = [filters.SearchFilter,
+                       filters.OrderingFilter,
+                       DjangoFilterBackend,
+                       ]
+    search_fields = ['title', 'description']
+    ordering_fields = ['title', 'id']
+    filter_class = ProductFilter
 
 class ProductRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
