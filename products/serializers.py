@@ -61,7 +61,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         ]
 
     def get_image(self, obj):
-        return obj.productimage_set.first().image.url
+        try:
+            return obj.productimage_set.first().image.url
+        except:
+            return None
 
 class ProductSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product_detail')

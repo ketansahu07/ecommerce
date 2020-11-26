@@ -120,12 +120,16 @@ class CheckoutAPIView(TokenMixin, APIView):
 
 
 class CartAPIView(CartTokenMixin, CartUpdateAPIMixin, APIView):
-    # authentication_classes = [SessionAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
     token_param = 'token'
     cart = None
     def get_cart(self):
-        data, cart_obj, response_status = self.get_cart_from_token()    # method in CartTokenMixin
+        #data, cart_obj, response_status = self.get_cart_from_token()    # method in CartTokenMixin
+        try:
+            cart_obj = Cart.objects.get(user=self.request.user, active=True)
+        except:
+            cart_obj = None
         if cart_obj == None or not cart_obj.active:
             cart = Cart()
             cart.tax_percentage = 0.075     # should be changed as per the country
@@ -148,7 +152,7 @@ class CartAPIView(CartTokenMixin, CartUpdateAPIMixin, APIView):
         items = CartItemSerializer(cart.cartitem_set.all(), many=True)
         # print(cart.items.all())
         data = {
-            'token': self.token,
+            # 'token': self.token,          # token is needed in case when the user can buy without logging in
             'cart': cart.id,
             'total': cart.total,
             'subtotal': cart.subtotal,

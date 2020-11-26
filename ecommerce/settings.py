@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'rest_framework',
+    # 'rest_registration',
     # my apps
     'products',
     'carts',

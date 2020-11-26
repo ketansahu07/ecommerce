@@ -69,7 +69,7 @@ class CartTokenMixin(TokenMixin, object):
 	token = None
 
 	def get_cart_from_token(self):
-		request = self.request
+		request = self.request		
 		response_status = status.HTTP_200_OK
 		cart_token = request.GET.get(self.token_param)
 
