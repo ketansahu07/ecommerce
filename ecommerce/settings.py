@@ -156,6 +156,12 @@ REST_FRAMEWORK = {
     "SEARCH_PARAM" : "q"
 }
 
+# REST_REGISTRATION = {
+#     'REGISTER_VERIFICATION_ENABLED': False,
+#     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+#     'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+# }
+
 JWT_AUTH = {
     "JWT_RESPONSE_PAYLOAD_HANDLER": 
             "ecommerce.utils.jwt_response_payload_handler",

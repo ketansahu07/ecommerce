@@ -41,6 +41,7 @@ from products.views import (APIHomeView,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',APIHomeView.as_view(), name='home'),
+    # path('api/accounts/', include('rest_registration.api.urls')),
     path('api/auth/token/', obtain_jwt_token, name='auth_login'),
     path('api/auth/token/refresh', refresh_jwt_token, name='refresh_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
