@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import datetime
 import os
-from .secrets import secret_key, braintree_public, braintree_private, braintree_merchant_id
+from .secrets import (secret_key, 
+                      braintree_public, 
+                      braintree_private, 
+                      braintree_merchant_id,
+                      email_host_user,
+                      email_host_password)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -157,18 +162,31 @@ REST_FRAMEWORK = {
     "SEARCH_PARAM" : "q"
 }
 
-# REST_REGISTRATION = {
-#     'REGISTER_VERIFICATION_ENABLED': False,
-#     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
-#     'RESET_PASSWORD_VERIFICATION_ENABLED': False,
-# }
-
 JWT_AUTH = {
     "JWT_RESPONSE_PAYLOAD_HANDLER": 
             "ecommerce.utils.jwt_response_payload_handler",
     "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=30000),
     "JWT_ALLOW_REFRESH": True, #False
 }
+
+# Email sending settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = email_host_user 
+EMAIL_HOST_PASSWORD = email_host_password 
+
+
+
+
+
+
+
+# REST_REGISTRATION = {
+#     'REGISTER_VERIFICATION_ENABLED': False,
+#     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+#     'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+# }
 
 # cors allow the origins that can make cross platform http/https requests   
 # CORS__ALLOW_ALL_ORIGINS = True

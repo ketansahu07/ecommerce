@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=255, min_length=2)
     last_name = serializers.CharField(max_length=255, min_length=2)
     email = serializers.EmailField(max_length=255, min_length=4)

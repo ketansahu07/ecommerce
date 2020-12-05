@@ -39,6 +39,7 @@ from products.views import (APIHomeView,
                             )
 
 from accounts.views import (RegisterView,
+                            VerifyEmail,
                             )
 
 urlpatterns = [
@@ -46,6 +47,7 @@ urlpatterns = [
     path('api/',APIHomeView.as_view(), name='home'),
     # path('api/accounts/', include('rest_registration.api.urls')),
     path('api/auth/register/', RegisterView.as_view(), name='registration'),
+    path('api/auth/verify-email/', VerifyEmail.as_view(), name='verify_email'),
     path('api/auth/token/', obtain_jwt_token, name='auth_login'),
     path('api/auth/token/refresh/', refresh_jwt_token, name='refresh_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
