@@ -5,3 +5,4 @@
 5. how is order_token sent in the request?
 6. change braintree_id from 999999999 to something else or check how to auto generate it in Orders.UserCheckout model
 7. create length, width and other detail fields in the product model
+8. change the host email and password for sending mails

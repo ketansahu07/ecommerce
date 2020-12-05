@@ -10,6 +10,8 @@ from rest_framework.reverse import reverse
 
 
 from rest_framework_jwt.settings import api_settings
+from rest_framework_jwt.utils import jwt_decode_handler
+import jwt 
 
 
 from .serializers import RegisterSerializer
@@ -49,4 +51,15 @@ class RegisterView(GenericAPIView):
 
 class VerifyEmail(GenericAPIView):
     def get(self, request):
-        pass
+        token = request.GET.get('token')
+        try:
+            payload = jwt_decode_handler(token)
+            user = User.objects.get(id=payload['user_id'])
+            if not user.is_active:
+                user.is_active = True
+                user.save()
+            return Response({'message': 'Successfully activated!'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
