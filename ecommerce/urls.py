@@ -38,12 +38,16 @@ from products.views import (APIHomeView,
                             ProductRetrieveAPIView,
                             )
 
+from accounts.views import (RegisterView,
+                            )
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',APIHomeView.as_view(), name='home'),
     # path('api/accounts/', include('rest_registration.api.urls')),
+    path('api/auth/register/', RegisterView.as_view(), name='registration'),
     path('api/auth/token/', obtain_jwt_token, name='auth_login'),
-    path('api/auth/token/refresh', refresh_jwt_token, name='refresh_token'),
+    path('api/auth/token/refresh/', refresh_jwt_token, name='refresh_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
     path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category_detail'),
     path('api/products/', ProductListAPIView.as_view(), name='product_list'),
