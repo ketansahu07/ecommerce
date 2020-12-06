@@ -4,10 +4,9 @@ from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 
 
-from rest_framework_jwt.settings import api_settings
-from rest_framework_jwt.utils import jwt_decode_handler
-import jwt 
-
+# from rest_framework_jwt.settings import api_settings
+# from rest_framework_jwt.utils import jwt_decode_handler
+# import jwt 
 
 
 User = get_user_model()
@@ -52,15 +51,9 @@ class LoginSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         email = attrs.get('email', '')
         password = attrs.get('password', '')
-        # username = None
-        try:
-            user = User.objects.get(email=email)
-            username = user.username
-        except User.DoesNotExist:
-            username = None
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(email=email, password=password)
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again!')
-        if not user.is_active:
+        if not user.is_verified:
             raise AuthenticationFailed('Account not verified')
         return super().validate(attrs)

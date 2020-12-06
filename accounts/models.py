@@ -3,6 +3,12 @@ from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
 
+from rest_framework_jwt.settings import api_settings
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -59,4 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def token(self):
-        return ''
+        payload = jwt_payload_handler(self)
+        token = jwt_encode_handler(payload)
+        return token

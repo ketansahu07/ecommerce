@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.contrib.sites.shortcuts import get_current_site
 
 
@@ -18,15 +18,8 @@ from .serializers import RegisterSerializer, LoginSerializer
 from .utils import Util, jwt_response_payload_handler
 
 
-
 User = get_user_model()
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-def generate_jwt_token(user):
-    payload = jwt_payload_handler(user)
-    token = jwt_encode_handler(payload)
-    return token
 
 class RegisterAPIView(GenericAPIView):
     serializer_class = RegisterSerializer
@@ -38,9 +31,7 @@ class RegisterAPIView(GenericAPIView):
         serializer.save()
         user_data = serializer.data
         user = User.objects.get(email=user_data['email'])
-        # payload = jwt_payload_handler(user)
-        # token = jwt_encode_handler(payload)
-        token = generate_jwt_token(user)
+        token = user.token()
         current_site = get_current_site(request).domain
         relativelink = reverse('verify_email')
         absurl = 'http://' + current_site + relativelink + '?token=' + token
@@ -79,6 +70,6 @@ class LoginAPIView(GenericAPIView):
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         user = User.objects.get(email=data['email'])
-        token = generate_jwt_token(user)    # a function defined above
+        token = user.token()
         response = jwt_response_payload_handler(token, user, request)       # custom function in utils.py
-        return Response({**serializer.data, **response}, status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
