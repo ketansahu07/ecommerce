@@ -14,15 +14,21 @@ from rest_framework_jwt.utils import jwt_decode_handler
 import jwt 
 
 
-from .serializers import RegisterSerializer
-from .utils import Util
+from .serializers import RegisterSerializer, LoginSerializer
+from .utils import Util, jwt_response_payload_handler
+
 
 
 User = get_user_model()
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-class RegisterView(GenericAPIView):
+def generate_jwt_token(user):
+    payload = jwt_payload_handler(user)
+    token = jwt_encode_handler(payload)
+    return token
+
+class RegisterAPIView(GenericAPIView):
     serializer_class = RegisterSerializer
     
     def post(self, request):
@@ -32,12 +38,13 @@ class RegisterView(GenericAPIView):
         serializer.save()
         user_data = serializer.data
         user = User.objects.get(email=user_data['email'])
-        payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
+        # payload = jwt_payload_handler(user)
+        # token = jwt_encode_handler(payload)
+        token = generate_jwt_token(user)
         current_site = get_current_site(request).domain
         relativelink = reverse('verify_email')
         absurl = 'http://' + current_site + relativelink + '?token=' + token
-        email_body = 'Hi ' + user.username + '!\nUse the link below to verify your email\n' + absurl
+        email_body = 'Hello ' + user.first_name + '!\nUse the link below to verify your email\n' + absurl
         email_data = {'to': user.email,
                       'subject': 'Verify your email',
                       'body': email_body}
@@ -49,17 +56,29 @@ class RegisterView(GenericAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-class VerifyEmail(GenericAPIView):
+class VerifyEmailAPIView(GenericAPIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
             payload = jwt_decode_handler(token)
             user = User.objects.get(id=payload['user_id'])
-            if not user.is_active:
-                user.is_active = True
+            if not user.is_verified:
+                user.is_verified = True
                 user.save()
             return Response({'message': 'Successfully activated!'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginAPIView(GenericAPIView):
+    serializer_class = LoginSerializer
+    def post(self, request):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        user = User.objects.get(email=data['email'])
+        token = generate_jwt_token(user)    # a function defined above
+        response = jwt_response_payload_handler(token, user, request)       # custom function in utils.py
+        return Response({**serializer.data, **response}, status=status.HTTP_200_OK)

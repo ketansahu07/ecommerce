@@ -30,8 +30,9 @@ class APIHomeView(APIView):
         data = {
             'auth': {
                 'register': api_reverse('registration', request=request),
+                'login': api_reverse('user_login', request=request),
                 'login_url': api_reverse('auth_login', request=request),
-                'refresh_url': api_reverse('refresh_token', request=request),
+                'refresh': api_reverse('refresh_token', request=request),
                 'user_checkout': api_reverse('user_checkout', request=request),
             },
             'products': {

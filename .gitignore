@@ -3,3 +3,4 @@
 /ecommerce/secrets.py
 /db.sqlite3
 /media/products/*
+/__pycache__

@@ -38,16 +38,18 @@ from products.views import (APIHomeView,
                             ProductRetrieveAPIView,
                             )
 
-from accounts.views import (RegisterView,
-                            VerifyEmail,
+from accounts.views import (RegisterAPIView,
+                            VerifyEmailAPIView,
+                            LoginAPIView,
                             )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',APIHomeView.as_view(), name='home'),
     # path('api/accounts/', include('rest_registration.api.urls')),
-    path('api/auth/register/', RegisterView.as_view(), name='registration'),
-    path('api/auth/verify-email/', VerifyEmail.as_view(), name='verify_email'),
+    path('api/auth/register/', RegisterAPIView.as_view(), name='registration'),
+    path('api/auth/verify-email/', VerifyEmailAPIView.as_view(), name='verify_email'),
+    path('api/auth/login/', LoginAPIView.as_view(), name='user_login'),
     path('api/auth/token/', obtain_jwt_token, name='auth_login'),
     path('api/auth/token/refresh/', refresh_jwt_token, name='refresh_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
