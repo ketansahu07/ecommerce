@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 from carts.views import (CartAPIView,
                          CheckoutAPIView,
@@ -49,9 +49,10 @@ urlpatterns = [
     # path('api/accounts/', include('rest_registration.api.urls')),
     path('api/auth/register/', RegisterAPIView.as_view(), name='registration'),
     path('api/auth/verify-email/', VerifyEmailAPIView.as_view(), name='verify_email'),
-    path('api/auth/login/', LoginAPIView.as_view(), name='user_login'),
-    path('api/auth/token/', obtain_jwt_token, name='auth_login'),
+    # path('api/auth/login/', LoginAPIView.as_view(), name='user_login'),
+    path('api/auth/login/', obtain_jwt_token, name='auth_login'),
     path('api/auth/token/refresh/', refresh_jwt_token, name='refresh_token'),
+    path('api/token/verify/', verify_jwt_token, name='verify_token'),
     path('api/categories/', CategoryListAPIView.as_view(), name='categories_list'),
     path('api/categories/<int:pk>/', CategoryRetrieveAPIView.as_view(), name='category_detail'),
     path('api/products/', ProductListAPIView.as_view(), name='product_list'),

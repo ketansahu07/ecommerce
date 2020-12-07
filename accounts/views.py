@@ -11,11 +11,16 @@ from rest_framework.reverse import reverse
 
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.utils import jwt_decode_handler
+from rest_framework_jwt.serializers import (JSONWebTokenSerializer, 
+                                            VerifyJSONWebTokenSerializer)
+from rest_framework_jwt.views import ObtainJSONWebToken
+
+
 import jwt 
 
 
 from .serializers import RegisterSerializer, LoginSerializer
-from .utils import Util, jwt_response_payload_handler
+from .utils import Util
 
 
 User = get_user_model()
@@ -63,13 +68,18 @@ class VerifyEmailAPIView(GenericAPIView):
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginAPIView(GenericAPIView):
-    serializer_class = LoginSerializer
-    def post(self, request):
-        data = request.data
-        serializer = self.serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
-        user = User.objects.get(email=data['email'])
-        token = user.token()
-        response = jwt_response_payload_handler(token, user, request)       # custom function in utils.py
-        return Response(response, status=status.HTTP_200_OK)
+# THIS IS OF NO USE AS OF NOW SINCE WE ARE USING JWT OBTAIN TOKEN URL
+
+# class LoginAPIView(GenericAPIView):
+    ## serializer_class = LoginSerializer
+    # serializer_class = JSONWebTokenSerializer
+    # def post(self, request):
+        # response = ObtainJSONWebToken.as_view()(request=request._request).data
+        ## data = request.data
+        ## serializer = self.serializer_class(data=data)
+        ## serializer.is_valid(raise_exception=True)
+        ## user = User.objects.get(email=data['email'])
+        ## token = user.token()
+        ## validated_data = VerifyJSONWebTokenSerializer().validate({'token': token})
+        ## response = jwt_response_payload_handler(token, user, request)       # custom function in utils.py
+        # return Response(response, status=status.HTTP_200_OK)
