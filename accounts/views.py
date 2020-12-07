@@ -7,16 +7,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.reverse import reverse
+from rest_framework.permissions import IsAuthenticated
 
 
 from rest_framework_jwt.settings import api_settings
-from rest_framework_jwt.utils import jwt_decode_handler
+from rest_framework_jwt.utils import jwt_decode_token
 from rest_framework_jwt.serializers import (JSONWebTokenSerializer, 
-                                            VerifyJSONWebTokenSerializer)
-from rest_framework_jwt.views import ObtainJSONWebToken
+                                            VerifyAuthTokenSerializer)
+from rest_framework_jwt.views import ObtainJSONWebTokenView
+from rest_framework_jwt.blacklist.serializers import BlacklistTokenSerializer
 
-
-import jwt 
+import jwt
 
 
 from .serializers import RegisterSerializer, LoginSerializer
@@ -56,7 +57,7 @@ class VerifyEmailAPIView(GenericAPIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
-            payload = jwt_decode_handler(token)
+            payload = jwt_decode_token(token)
             user = User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified = True
@@ -67,19 +68,27 @@ class VerifyEmailAPIView(GenericAPIView):
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# THIS IS OF NO USE AS OF NOW SINCE WE ARE USING JWT OBTAIN TOKEN URL
-
-# class LoginAPIView(GenericAPIView):
-    ## serializer_class = LoginSerializer
+# THIS IS OF NO USE AS OF NOW
+class LoginAPIView(GenericAPIView):
+    serializer_class = LoginSerializer
     # serializer_class = JSONWebTokenSerializer
-    # def post(self, request):
-        # response = ObtainJSONWebToken.as_view()(request=request._request).data
+    def post(self, request):
+        response = ObtainJSONWebTokenView.as_view()(request=request._request).data
         ## data = request.data
         ## serializer = self.serializer_class(data=data)
         ## serializer.is_valid(raise_exception=True)
         ## user = User.objects.get(email=data['email'])
         ## token = user.token()
-        ## validated_data = VerifyJSONWebTokenSerializer().validate({'token': token})
+        ## validated_data = VerifyAuthTokenSerializer().validate({'token': token})
         ## response = jwt_response_payload_handler(token, user, request)       # custom function in utils.py
-        # return Response(response, status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(GenericAPIView):
+    serializer_class = BlacklistTokenSerializer
+    def post(self, request):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message":"success"}, status=status.HTTP_204_NO_CONTENT)
