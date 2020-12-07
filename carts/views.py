@@ -120,12 +120,12 @@ class CheckoutAPIView(TokenMixin, APIView):
 
 
 class CartAPIView(CartTokenMixin, CartUpdateAPIMixin, APIView):
-    authentication_classes = [SessionAuthentication]
+    # authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     token_param = 'token'
     cart = None
     def get_cart(self):
-        #data, cart_obj, response_status = self.get_cart_from_token()    # method in CartTokenMixin
+        # data, cart_obj, response_status = self.get_cart_from_token()    # method in CartTokenMixin
         try:
             cart_obj = Cart.objects.get(user=self.request.user, active=True)
         except:
