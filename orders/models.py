@@ -56,7 +56,7 @@ AADDRESS_TYPE = (
 )
 
 class UserAddress(models.Model):
-    user = models.ForeignKey(UserCheckout, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     type = models.CharField(max_length=120, choices=AADDRESS_TYPE)
     street = models.CharField(max_length=225)
     city = models.CharField(max_length=120)
