@@ -7,3 +7,5 @@
 7. create length, width and other detail fields in the product model
 8. change the host email and password for sending mails
 9. Remove username fields from everywhere
+10. order total and cart total is not working
+11. automatically get the user id and cart id in user address model

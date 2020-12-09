@@ -8,7 +8,7 @@ from django.views.generic.list import ListView
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response 
 from rest_framework.views import APIView 
 
@@ -59,7 +59,7 @@ class UserAddressListAPIView(TokenMixin, ListAPIView):
         user_checkout_data = self.parse_token(user_checkout_token)
         user_checkout_id = user_checkout_data.get("user_checkout_id")
         if self.request.user.is_authenticated:
-            return UserAddress.objects.filter(user__user=self.request.user)
+            return UserAddress.objects.filter(user=self.request.user)   ## earlier it was user__user=self.request.user
         elif user_checkout_id:
             return UserAddress.objects.filter(user__id=int(user_checkout_id))
         else:
@@ -96,27 +96,27 @@ class UserCheckoutMixin(TokenMixin, object):
                     user_checkout.save()
             except:
                 pass
-            else:
-                pass
+        else:
+            pass
             
-            if user_checkout:
-                data["success"] = True
-                data["braintree_id"] = user_checkout.get_braintree_id   # get_braintree_id is a method of the UserCheckout class
-                data["user_checkout_id"] = user_checkout.id
-                data["user_checkout_token"] = self.create_token(data)
+        if user_checkout:
+            data["success"] = True
+            data["braintree_id"] = user_checkout.get_braintree_id   # get_braintree_id is a method of the UserCheckout class
+            data["user_checkout_id"] = user_checkout.id
+            data["user_checkout_token"] = self.create_token(data)
 
-                del data["braintree_id"]
-                del data["user_checkout_id"]
-                data["braintree_client_token"] = user_checkout.get_client_token()
+            del data["braintree_id"]
+            del data["user_checkout_id"]
+            data["braintree_client_token"] = user_checkout.get_client_token()
             
-            return data
+        return data
 
 
 class UserCheckoutAPI(UserCheckoutMixin, APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
-        data = self.get_checkout_data(user=request.user)    # function in UserCheckoutMixin
+        data = self.get_checkout_data(user=request.user)    # function in UserCheckoutMixin, this also creates checkout_token and braintree_client_token
         return Response(data)
 
     def post(self, request, format=None):

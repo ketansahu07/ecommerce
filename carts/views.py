@@ -92,6 +92,7 @@ class CheckoutAPIView(TokenMixin, APIView):
     def post(self, request, format=None):
         data = request.data
         serializer = CheckoutSerializer(data=data)
+        order_token = None
         if serializer.is_valid():
             data = serializer.data
             user_checkout_id = data.get('user_checkout_id')
@@ -148,6 +149,7 @@ class CartAPIView(CartTokenMixin, CartUpdateAPIMixin, APIView):
         cart = self.get_cart()
         self.cart = cart
         self.update_cart()  # method in CartUpdateAPIMixin
+        cart.save()
         # token = self.create_token(cart.id)
         items = CartItemSerializer(cart.cartitem_set.all(), many=True)
         # print(cart.items.all())

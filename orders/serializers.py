@@ -80,7 +80,7 @@ class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
         fields = [
-            # "id",
+            "id",
             "user",
             "type",
             "street",

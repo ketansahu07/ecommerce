@@ -56,7 +56,7 @@ class TokenMixin(object):
 			return {}
 		try:
 			token_decoded = base64.b64decode(token)
-			token_dict = ast.literal_eval(token_decoded)
+			token_dict = ast.literal_eval(token_decoded.decode("utf-8"))
 			return token_dict
 		except:
 			return {}

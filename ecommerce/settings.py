@@ -170,6 +170,7 @@ JWT_AUTH = {
             "ecommerce.utils.jwt_response_payload_handler",
     "JWT_EXPIRATION_DELTA": datetime.timedelta(seconds=30000),
     "JWT_ALLOW_REFRESH": True, #False
+    'JWT_DELETE_STALE_BLACKLISTED_TOKENS': True,
 }
 
 # Email sending settings
